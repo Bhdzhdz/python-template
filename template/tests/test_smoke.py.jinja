@@ -1,5 +1,7 @@
+import re
+
 import {{ package_name }}
 
 
 def test_version() -> None:
-    assert {{ package_name }}.__version__
+    assert re.fullmatch(r"\d+\.\d+\.\d+", {{ package_name }}.__version__)
