@@ -1,0 +1,40 @@
+_subdirectory: template
+_min_copier_version: "9.0.0"
+
+project_name:
+  type: str
+  help: Human-readable project name
+
+project_slug:
+  type: str
+  help: Repo / distribution name (kebab-case)
+  default: "{{ project_name | lower | replace(' ', '-') | replace('_', '-') }}"
+
+package_name:
+  type: str
+  help: Importable Python package name
+  default: "{{ project_slug | replace('-', '_') }}"
+
+description:
+  type: str
+  help: Short description
+  default: ""
+
+author_name:
+  type: str
+  default: ""
+
+author_email:
+  type: str
+  default: ""
+
+python_version:
+  type: str
+  help: Minimum Python version
+  choices: ["3.10", "3.11", "3.12", "3.13"]
+  default: "3.12"
+
+_tasks:
+  - "git init -b main"
+  - "uv sync"
+  - "uv run pre-commit install"
