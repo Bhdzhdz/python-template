@@ -16,3 +16,7 @@ uvx copier copy --trust /path/to/this/repo ~/Projects/my-new-project
 ```bash
 uvx copier update --trust
 ```
+
+## Commits
+
+Conventional Commits are enforced via pre-commit (`commit-msg` hook) in this repo and in generated projects. In this repo run `uvx pre-commit install` once.
