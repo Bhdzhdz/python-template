@@ -38,7 +38,13 @@ docstring-code-format = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--cov={{ package_name }} --cov-report=term-missing"
+addopts = "--strict-markers --strict-config --cov={{ package_name }} --cov-report=term-missing"
 
 [tool.coverage.run]
 source = ["src/{{ package_name }}"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError"]
