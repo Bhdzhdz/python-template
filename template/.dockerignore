@@ -16,3 +16,8 @@ htmlcov
 tests
 Dockerfile
 .dockerignore
+.github
+.specify
+.agents
+specs
+AGENTS.md
