@@ -34,6 +34,11 @@ python_version:
   choices: ["3.10", "3.11", "3.12", "3.13"]
   default: "3.12"
 
+use_github_actions:
+  type: bool
+  help: Add a GitHub Actions CI workflow?
+  default: true
+
 _tasks:
   - "git init -b main"
   - "uv sync"
