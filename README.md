@@ -19,4 +19,4 @@ uvx copier update --trust
 
 ## Commits
 
-Conventional Commits are enforced via pre-commit (`commit-msg` hook) in this repo and in generated projects. In this repo run `uvx pre-commit install` once.
+Conventional Commits are enforced via [commitizen](https://commitizen-tools.github.io/commitizen/) (pre-commit `commit-msg` hook; use `cz commit` for a guided prompt, `cz bump` to release) in this repo and in generated projects. In this repo run `uvx pre-commit install` once.

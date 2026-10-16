@@ -25,4 +25,4 @@ Keep token usage (cost) low. Skills in `.agents/skills/` give details; load them
 - `speckit-*`: Spec Kit spec-driven workflow (constitution → specify → clarify → plan → tasks → implement); state in `.specify/`, specs in `specs/`
 
 ## Commits
-- Use Conventional Commits (`type(scope): subject`; types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert). Enforced by a `commit-msg` hook.
+- Use Conventional Commits (`type(scope): subject`; types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert). Enforced by a commitizen `commit-msg` hook; `uv run cz commit` gives a guided prompt and `uv run cz bump` cuts a release.

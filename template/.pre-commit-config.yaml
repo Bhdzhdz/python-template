@@ -24,10 +24,10 @@ repos:
     hooks:
       - id: uv-lock
 
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.0.0
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v4.19.2
     hooks:
-      - id: conventional-pre-commit
+      - id: commitizen
         stages: [commit-msg]
 
   # Heavier checks run on push only

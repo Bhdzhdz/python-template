@@ -1,10 +1,10 @@
 name: Tag release
 
-# Creates a new semver tag (vX.Y.Z) for every push to main.
-# Bump is derived from Conventional Commits since the previous tag:
-#   BREAKING CHANGE / "type!:"  -> major
-#   feat                        -> minor
-#   anything else               -> patch
+# Runs `cz bump` on every push to main: bumps the version from Conventional Commits,
+# updates CHANGELOG.md, commits "bump: version X -> Y" and pushes the commit and tag (vX.Y.Z).
+# Commits that commitizen doesn't consider bumpable (docs, chore, ...) get a PATCH bump,
+# so every push to main produces a new tag.
+# Pushes made with GITHUB_TOKEN don't trigger workflows, so the bump commit can't loop.
 
 on:
   push:
@@ -18,38 +18,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  tag:
+  bump:
+    if: ${{ !startsWith(github.event.head_commit.message, 'bump:') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Create tag
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Bump version, changelog and tag
         run: |
-          set -euo pipefail
-
-          if [ -n "$(git tag --points-at HEAD)" ]; then
-            echo "HEAD is already tagged; nothing to do."
-            exit 0
-          fi
-
-          last="$(git describe --tags --abbrev=0 --match 'v[0-9]*' 2>/dev/null || echo v0.0.0)"
-          if [ "$last" = "v0.0.0" ]; then range="HEAD"; else range="$last..HEAD"; fi
-          log="$(git log "$range" --format='%s%n%b%n--END--')"
-
-          IFS=. read -r major minor patch <<< "${last#v}"
-          if grep -qE '^[a-z]+(\([^)]*\))?!:|^BREAKING[ -]CHANGE' <<< "$log"; then
-            major=$((major + 1)); minor=0; patch=0
-          elif grep -qE '^feat(\([^)]*\))?:' <<< "$log"; then
-            minor=$((minor + 1)); patch=0
-          else
-            patch=$((patch + 1))
-          fi
-
-          new="v$major.$minor.$patch"
-          echo "$last -> $new"
+          set -uo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$new" -m "$new"
-          git push origin "$new"
+
+          uvx --from commitizen cz bump --yes
+          rc=$?
+          # 21 = no commits eligible for a bump (e.g. only docs/chore): force a patch release
+          if [ "$rc" -eq 21 ]; then
+            uvx --from commitizen cz bump --yes --increment PATCH
+            rc=$?
+          fi
+          [ "$rc" -eq 0 ] || exit "$rc"
+
+          git push origin HEAD:main --follow-tags
