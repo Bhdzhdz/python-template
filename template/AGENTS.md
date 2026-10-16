@@ -22,3 +22,4 @@ Keep token usage (cost) low. Skills in `.agents/skills/` give details; load them
 - `concise-output`: response and edit style
 - `quiet-commands`: running tools with minimal output
 - `context-hygiene`: long sessions, subagents, model choice
+- `speckit-*`: Spec Kit spec-driven workflow (constitution → specify → clarify → plan → tasks → implement); state in `.specify/`, specs in `specs/`

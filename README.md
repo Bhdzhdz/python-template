@@ -1,6 +1,6 @@
 # Python project template (Copier)
 
-Includes: uv, ruff (lint + format), ty, pytest + coverage, pre-commit (hygiene/ruff on commit; ty + pytest on push), Dockerfile (uv), `.gitignore`, `.dockerignore`, src/ layout.
+Includes: uv, ruff (lint + format), ty, pytest + coverage, pre-commit (hygiene/ruff on commit; ty + pytest on push), Dockerfile (uv), `.gitignore`, `.dockerignore`, src/ layout, [Spec Kit](https://github.com/github/spec-kit) (`.specify/` + `speckit-*` skills in `.agents/skills`, codex integration, v1.2.0).
 
 ## Use
 
