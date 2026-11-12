@@ -15,6 +15,8 @@ Keep token usage (cost) low. Skills in `.agents/skills/` give details; load them
 - Install: `uv sync`
 - Lint/format: `uv run ruff check --fix . && uv run ruff format .`
 - Types: `uv run ty check`
+- Duplication: `uv run pylint`
+- Complexity / MI: `uv run xenon -b B -m A -a A src tests` (`radon cc -n C -s src tests`, `radon mi -n B -s src tests`)
 - Tests: `uv run pytest -q -x --tb=short`
 
 ## Skills

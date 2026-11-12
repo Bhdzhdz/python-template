@@ -9,10 +9,14 @@ uv sync                      # install deps
 uv run pre-commit install    # hooks (commit + pre-push)
 uv run ruff check . && uv run ruff format .
 uv run ty check
+uv run pylint                # duplicate-code check (R0801)
+uv run xenon -b B -m A -a A src tests  # complexity gates (via radon)
+uv run radon cc -a -s src tests        # cyclomatic complexity report
+uv run radon mi -s src tests           # maintainability index report
 uv run pytest
 ```
 
-Pre-commit runs ruff + hygiene checks; pre-push runs `ty` and `pytest`.
+Pre-commit runs ruff + hygiene checks; pre-push runs `ty`, `pylint` (duplicate-code), `xenon` (radon complexity), and `pytest`.
 
 ## Docker
 

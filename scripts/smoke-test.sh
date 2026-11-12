@@ -14,4 +14,8 @@ test -f .copier-answers.yml
 uv run ruff check . -q
 uv run ruff format --check . -q
 uv run ty check
+uv run pylint
+uv run xenon --max-absolute B --max-modules A --max-average A src tests
+uv run radon cc -n C -s src tests
+uv run radon mi -n B -s src tests
 uv run pytest -q -x --tb=short

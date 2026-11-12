@@ -14,6 +14,8 @@ Tool output is billed as input tokens on every later turn. Keep it small.
 | Lint | `uv run ruff check --output-format=concise .` |
 | Format | `uv run ruff format -q .` |
 | Types | `uv run ty check --output-format concise 2>&1 \| head -40` |
+| Duplication | `uv run pylint` |
+| Complexity | `uv run xenon -b B -m A -a A src tests` (`radon cc -n C -s src tests`) |
 | Install | `uv sync -q` |
 | Git status | `git status -sb` |
 | Git diff | `git diff --stat`, then `git diff -- <file>` for one file |

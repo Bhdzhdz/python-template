@@ -40,6 +40,20 @@ repos:
         types: [python]
         pass_filenames: false
         stages: [pre-push]
+      - id: duplicate-code
+        name: pylint duplicate-code
+        entry: uv run pylint
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [pre-push]
+      - id: complexity
+        name: xenon complexity check
+        entry: uv run xenon --max-absolute B --max-modules A --max-average A src tests
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [pre-push]
       - id: pytest
         name: pytest
         entry: uv run pytest
