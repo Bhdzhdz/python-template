@@ -31,8 +31,8 @@ author_email:
 python_version:
   type: str
   help: Minimum Python version
-  choices: ["3.10", "3.11", "3.12", "3.13"]
-  default: "3.12"
+  choices: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+  default: "3.14"
 
 use_github_actions:
   type: bool
