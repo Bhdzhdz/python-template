@@ -1,3 +1,9 @@
+## v1.2.0 (2026-11-12)
+
+### Feat
+
+- update default python version to 3.14
+
 ## v1.1.0 (2026-11-12)
 
 ### Feat
