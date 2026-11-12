@@ -11,11 +11,9 @@ out="$tmp/smoke-project"
 uvx copier copy --trust --defaults --vcs-ref=HEAD --data project_name="Smoke Test" "$repo" "$out" >/dev/null 2>&1
 cd "$out"
 test -f .copier-answers.yml
-uv run ruff check . -q
-uv run ruff format --check . -q
-uv run ty check
-uv run pylint
-uv run xenon --max-absolute B --max-modules A --max-average A src tests
-uv run radon cc -n C -s src tests
-uv run radon mi -n B -s src tests
-uv run pytest -q -x --tb=short
+test -f .specify/memory/constitution.md
+test -f .ignore
+./scripts/map.sh
+./scripts/check.sh --fix src/smoke_test/__init__.py
+./scripts/check.sh --fix
+uv run pytest tests/test_smoke.py::test_version
