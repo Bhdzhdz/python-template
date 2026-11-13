@@ -1,3 +1,9 @@
+## v1.3.0 (2026-11-13)
+
+### Feat
+
+- integrate codeaudit SAST security gate
+
 ## v1.2.0 (2026-11-12)
 
 ### Feat
