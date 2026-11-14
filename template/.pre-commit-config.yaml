@@ -42,7 +42,7 @@ repos:
         types: [python]
 
       - id: check-all
-        name: project quality gates (ty, deptry, vulture, import-linter, pylint, codeaudit, xenon, radon, pytest)
+        name: project quality gates (ty, deptry, vulture, import-linter, pylint, codeaudit, pip-audit, xenon, radon, pytest)
         entry: scripts/check.sh
         language: system
         types: [python]

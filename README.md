@@ -17,6 +17,14 @@ uvx copier copy --trust /path/to/this/repo ~/Projects/my-new-project
 uvx copier update --trust
 ```
 
+## Maintaining this template
+
+```bash
+./scripts/smoke-test.sh                # render template + run all gates, copier update & ci_provider checks
+./scripts/update-template.sh           # autoupdate pre-commit configs + Dockerfile uv tag + run smoke test
+./scripts/update-template.sh --speckit # also refresh vendored Spec Kit (.specify/ & speckit-* skills)
+```
+
 ## Commits
 
 Conventional Commits are enforced via [commitizen](https://commitizen-tools.github.io/commitizen/) (pre-commit `commit-msg` hook; use `cz commit` for a guided prompt, `cz bump` to release) in this repo and in generated projects. In this repo run `uvx pre-commit install` once.

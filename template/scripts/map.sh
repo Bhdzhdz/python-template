@@ -3,10 +3,22 @@
 # Usage: ./scripts/map.sh [path ...]
 set -euo pipefail
 
-cd "$(dirname "${BASH_SOURCE[0]}")/.."
+caller_pwd="$PWD"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
 
 if [[ $# -eq 0 ]]; then
     set -- src tests
+else
+    resolved=()
+    for arg in "$@"; do
+        if [[ "$arg" == /* ]]; then
+            resolved+=("$(realpath -m --relative-to="$repo_root" "$arg")")
+        else
+            resolved+=("$(realpath -m --relative-to="$repo_root" "$caller_pwd/$arg")")
+        fi
+    done
+    set -- "${resolved[@]}"
 fi
 
 uv run --no-sync python - "$@" <<'PY'

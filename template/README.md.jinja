@@ -8,27 +8,18 @@
 uv sync                              # install deps
 uv run pre-commit install            # hooks (commit + pre-push)
 uv run just                          # list available justfile recipes
-uv run just fix                      # format/fix + run all 11 repo quality gates quietly
+uv run just fix                      # format/fix + run all 12 repo quality gates quietly
 uv run just changed                  # fast gate on all git-changed Python files
 ./scripts/map.sh                     # compact AST map (files, line ranges, typed signatures, class fields)
 ./scripts/check.sh --fix src/file.py # fast single-file gate + matching test
 ./scripts/check.sh --fix --changed   # fast gate on all git-changed Python files
-./scripts/check.sh --fix             # format/fix + run all 11 repo quality gates quietly
+./scripts/check.sh --fix             # format/fix + run all 12 repo quality gates quietly
 ```
 
-Individual checks:
+Individual checks (all orchestrated by `./scripts/check.sh`; see `AGENTS.md` and `pyproject.toml` for gate rules):
 
 ```bash
-uv run ruff check . && uv run ruff format .
-uv run ty check
-uv run deptry .                        # unused / missing / misplaced deps
-uv run vulture                         # dead / unused code
-uv run lint-imports                    # module import boundaries
-uv run pylint                          # duplicate-code & module-size check
-uv run codeaudit cimode src            # SAST security scan
-uv run pip-audit                       # third-party dependency CVE scan
-uv run xenon -b B -m A -a A src tests  # cyclomatic complexity gates
-uv run radon mi -n B -s src tests      # maintainability index check (rank A required)
+uv run just audit                      # codeaudit SAST + pip-audit CVE check
 uv run pytest -q path::test_name       # fast single test (no coverage table)
 uv run pytest --cov                    # full test suite + >=80% branch coverage
 ```

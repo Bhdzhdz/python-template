@@ -98,7 +98,7 @@ max-returns = 5
 max-statements = 40
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["S101", "PLR2004"]
+"tests/**/*.py" = ["S101", "PLR2004", "ANN401"]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -165,6 +165,7 @@ exclude_also = [
 [tool.commitizen]
 name = "cz_conventional_commits"
 version_provider = "uv"
+version_files = ["src/{{ package_name }}/__init__.py:__version__"]
 tag_format = "v$version"
 update_changelog_on_bump = true
 major_version_zero = true

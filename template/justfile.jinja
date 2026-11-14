@@ -4,7 +4,7 @@ set dotenv-load := true
 default:
     @just --list
 
-# Run all 11 repo-wide quality gates (or pass file paths)
+# Run all 12 repo-wide quality gates (or pass file paths)
 check *args:
     ./scripts/check.sh {% raw %}{{ args }}{% endraw %}
 
@@ -31,7 +31,7 @@ cov:
 # Run SAST security scan on src/ and CVE audit on locked dependencies
 audit:
     uv run codeaudit cimode src
-    uv run pip-audit
+    uv run pip-audit --skip-editable
 
 # Interactive Conventional Commit prompt
 commit:
@@ -51,4 +51,4 @@ docker-run:
 
 # Remove tool caches and build artifacts
 clean:
-    rm -rf .ruff_cache .pytest_cache .mypy_cache .coverage .coverage.* htmlcov dist build
+    rm -rf .ruff_cache .pytest_cache .import_linter_cache .coverage .coverage.* htmlcov dist build
