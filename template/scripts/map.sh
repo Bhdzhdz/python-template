@@ -3,6 +3,8 @@
 # Usage: ./scripts/map.sh [path ...]
 set -euo pipefail
 
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
 if [[ $# -eq 0 ]]; then
     set -- src tests
 fi
@@ -50,6 +52,9 @@ for path in files:
             print(f"  L{node.lineno}-L{node.end_lineno}: {fmt_sig(node)}")
         elif isinstance(node, ast.TypeAlias):
             print(f"  L{node.lineno}: {ast.unparse(node)}")
+        elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            ann = ast.unparse(node.annotation)
+            print(f"  L{node.lineno}: {node.target.id}: {ann}")
         elif isinstance(node, ast.ClassDef):
             decs = fmt_decorators(node.decorator_list)
             bases = f"({', '.join(ast.unparse(b) for b in node.bases)})" if node.bases else ""

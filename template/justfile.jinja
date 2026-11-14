@@ -28,9 +28,10 @@ test *args:
 cov:
     uv run pytest -x --cov --no-cov-on-fail
 
-# Run SAST security scan on src/
+# Run SAST security scan on src/ and CVE audit on locked dependencies
 audit:
     uv run codeaudit cimode src
+    uv run pip-audit
 
 # Interactive Conventional Commit prompt
 commit:

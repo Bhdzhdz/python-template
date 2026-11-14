@@ -43,6 +43,6 @@ ci_provider:
   default: "github"
 
 _tasks:
-  - "git init -b main"
+  - "git rev-parse --git-dir >/dev/null 2>&1 || git init -b main"
   - "uv sync"
   - "uv run pre-commit install"

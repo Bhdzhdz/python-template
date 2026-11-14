@@ -6,6 +6,8 @@
 #   ./scripts/check.sh [--fix] path/to/file.py [...]   # Fast check on specific file(s) + matching unit tests
 set -uo pipefail
 
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
 fix=0
 changed=0
 targets=()

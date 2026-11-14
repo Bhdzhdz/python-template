@@ -8,6 +8,7 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
         exclude: ^template/
+      - id: check-toml
       - id: check-merge-conflict
       - id: check-json
       - id: check-added-large-files
