@@ -4,6 +4,7 @@ _min_copier_version: "9.0.0"
 project_name:
   type: str
   help: Human-readable project name
+  validator: "{% if not project_name.strip() %}project_name cannot be empty{% endif %}"
 
 project_slug:
   type: str
@@ -14,6 +15,7 @@ package_name:
   type: str
   help: Importable Python package name
   default: "{{ project_slug | replace('-', '_') }}"
+  validator: "{% if not (package_name | regex_search('^[a-z][a-z0-9_]*$')) %}package_name must be a valid lowercase Python identifier{% endif %}"
 
 description:
   type: str
@@ -34,10 +36,11 @@ python_version:
   choices: ["3.12", "3.13", "3.14"]
   default: "3.14"
 
-use_github_actions:
-  type: bool
-  help: Add a GitHub Actions CI workflow?
-  default: true
+ci_provider:
+  type: str
+  help: CI/CD pipeline configuration to include
+  choices: ["github", "gitlab", "both", "none"]
+  default: "github"
 
 _tasks:
   - "git init -b main"

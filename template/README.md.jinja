@@ -7,8 +7,12 @@
 ```bash
 uv sync                              # install deps
 uv run pre-commit install            # hooks (commit + pre-push)
-./scripts/map.sh                     # compact AST map (files, line ranges, typed signatures)
+uv run just                          # list available justfile recipes
+uv run just fix                      # format/fix + run all 11 repo quality gates quietly
+uv run just changed                  # fast gate on all git-changed Python files
+./scripts/map.sh                     # compact AST map (files, line ranges, typed signatures, class fields)
 ./scripts/check.sh --fix src/file.py # fast single-file gate + matching test
+./scripts/check.sh --fix --changed   # fast gate on all git-changed Python files
 ./scripts/check.sh --fix             # format/fix + run all 11 repo quality gates quietly
 ```
 

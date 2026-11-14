@@ -12,27 +12,33 @@ repos:
       - id: check-added-large-files
       - id: detect-private-key
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.6
-    hooks:
-      - id: ruff
-        args: [--fix]
-      - id: ruff-format
-
-  - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.5.14
-    hooks:
-      - id: uv-lock
-
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v4.19.2
     hooks:
       - id: commitizen
         stages: [commit-msg]
 
-  # Heavier checks run on push only via the unified quiet gate script
   - repo: local
     hooks:
+      - id: uv-lock
+        name: uv lock check
+        entry: uv lock --check
+        language: system
+        files: ^(pyproject\.toml|uv\.lock)$
+        pass_filenames: false
+
+      - id: ruff-check
+        name: ruff lint
+        entry: uv run ruff check --fix
+        language: system
+        types: [python]
+
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types: [python]
+
       - id: check-all
         name: project quality gates (ty, deptry, vulture, import-linter, pylint, codeaudit, xenon, radon, pytest)
         entry: scripts/check.sh

@@ -10,7 +10,7 @@ Tool output is billed as input tokens on every later turn. Keep it small.
 | Task | Command |
 | --- | --- |
 | **AST symbol & signature map (1 call)** | `./scripts/map.sh [path ...]` |
-| **Single-file fast gate (iteration)** | `./scripts/check.sh --fix path/to/file.py` |
+| **Single-file / changed gate (iteration)** | `./scripts/check.sh --fix path/to/file.py` or `./scripts/check.sh --fix --changed` |
 | **All quality gates (final 1-call check)** | `./scripts/check.sh` (or `./scripts/check.sh --fix`) |
 | One test (fast, no cov table; `-q --tb=short` default) | `uv run pytest path::test_name` |
 | All tests + coverage gate | `uv run pytest -x --cov 2>&1 \| tail -30` |

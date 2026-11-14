@@ -1,0 +1,53 @@
+set dotenv-load := true
+
+# List available recipes
+default:
+    @just --list
+
+# Run all 11 repo-wide quality gates (or pass file paths)
+check *args:
+    ./scripts/check.sh {% raw %}{{ args }}{% endraw %}
+
+# Auto-fix lint/format and run all quality gates (or pass file paths)
+fix *args:
+    ./scripts/check.sh --fix {% raw %}{{ args }}{% endraw %}
+
+# Fast auto-fix + gate check on git-changed Python files
+changed:
+    ./scripts/check.sh --fix --changed
+
+# Print compact AST symbol & signature map
+map *args:
+    ./scripts/map.sh {% raw %}{{ args }}{% endraw %}
+
+# Run pytest (pass specific test paths or flags)
+test *args:
+    uv run pytest {% raw %}{{ args }}{% endraw %}
+
+# Run full test suite with branch coverage gate (>=80%)
+cov:
+    uv run pytest -x --cov --no-cov-on-fail
+
+# Run SAST security scan on src/
+audit:
+    uv run codeaudit cimode src
+
+# Interactive Conventional Commit prompt
+commit:
+    uv run cz commit
+
+# Bump version and update changelog
+bump *args:
+    uv run cz bump {% raw %}{{ args }}{% endraw %}
+
+# Build Docker image
+docker-build:
+    docker build -t {{ project_slug }} .
+
+# Run Docker container
+docker-run:
+    docker run --rm {{ project_slug }}
+
+# Remove tool caches and build artifacts
+clean:
+    rm -rf .ruff_cache .pytest_cache .mypy_cache .coverage .coverage.* htmlcov dist build

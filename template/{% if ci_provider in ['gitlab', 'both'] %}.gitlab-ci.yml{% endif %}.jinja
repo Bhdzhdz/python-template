@@ -1,0 +1,22 @@
+stages:
+  - check
+
+variables:
+  UV_CACHE_DIR: .uv-cache
+  UV_LINK_MODE: copy
+
+check:
+  stage: check
+  image: ghcr.io/astral-sh/uv:python{{ python_version }}-bookworm-slim
+  interruptible: true
+  timeout: 10m
+  cache:
+    key:
+      files:
+        - uv.lock
+    paths:
+      - $UV_CACHE_DIR
+  script:
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends git >/dev/null
+    - uv sync --locked
+    - ./scripts/check.sh

@@ -5,7 +5,7 @@ description = "{{ description }}"
 readme = "README.md"
 requires-python = ">={{ python_version }}"
 {%- if author_name %}
-authors = [{ name = "{{ author_name }}", email = "{{ author_email }}" }]
+authors = [{ name = "{{ author_name }}"{% if author_email %}, email = "{{ author_email }}"{% endif %} }]
 {%- endif %}
 dependencies = []
 
@@ -28,6 +28,7 @@ dev = [
     "pytest-cov>=5.0",
     "radon>=6.0",
     "ruff>=0.8",
+    "rust-just>=1.38",
     "ty>=0.0.1a1",
     "vulture>=2.11",
     "xenon>=0.9",
@@ -41,30 +42,39 @@ output-format = "concise"
 
 [tool.ruff.lint]
 select = [
-    "E",    # pycodestyle errors
-    "F",    # pyflakes
-    "W",    # pycodestyle warnings
-    "I",    # isort
-    "B",    # flake8-bugbear
-    "UP",   # pyupgrade
-    "SIM",  # flake8-simplify
-    "C4",   # flake8-comprehensions
-    "C90",  # mccabe complexity
-    "RUF",  # ruff-specific
-    "PT",   # flake8-pytest-style
-    "PL",   # pylint (refactor, structural limits, errors, warnings)
-    "ERA",  # eradicate (no commented-out code)
-    "ARG",  # flake8-unused-arguments
-    "T20",  # flake8-print (no print in production code)
-    "S",    # flake8-bandit (security)
-    "ANN",  # flake8-annotations (require type annotations)
-    "TC",   # flake8-type-checking (type-only imports)
-    "PIE",  # flake8-pie
-    "FURB", # refurb
-    "PERF", # perflint
-    "RET",  # flake8-return
-    "TID",  # flake8-tidy-imports
+    "E",     # pycodestyle errors
+    "F",     # pyflakes
+    "W",     # pycodestyle warnings
+    "I",     # isort
+    "B",     # flake8-bugbear
+    "UP",    # pyupgrade
+    "SIM",   # flake8-simplify
+    "C4",    # flake8-comprehensions
+    "C90",   # mccabe complexity
+    "RUF",   # ruff-specific
+    "PT",    # flake8-pytest-style
+    "PL",    # pylint (refactor, structural limits, errors, warnings)
+    "ERA",   # eradicate (no commented-out code)
+    "ARG",   # flake8-unused-arguments
+    "T20",   # flake8-print (no print in production code)
+    "S",     # flake8-bandit (security)
+    "ANN",   # flake8-annotations (require type annotations)
+    "TC",    # flake8-type-checking (type-only imports)
+    "PIE",   # flake8-pie
+    "FURB",  # refurb
+    "PERF",  # perflint
+    "RET",   # flake8-return
+    "TID",   # flake8-tidy-imports
+    "PGH",   # pygrep-hooks (require specific codes on noqa / type: ignore)
+    "BLE",   # flake8-blind-except (no bare except Exception)
+    "DTZ",   # flake8-datetimez (require timezone-aware datetimes)
+    "ASYNC", # flake8-async (no blocking calls in async functions)
+    "PTH",   # flake8-use-pathlib (prefer pathlib.Path over os.path)
+    "A",     # flake8-builtins (no shadowing Python builtins)
 ]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
 
 [tool.ruff.lint.mccabe]
 max-complexity = 10
@@ -103,7 +113,10 @@ files = ["src", "tests"]
 
 [tool.pylint."messages control"]
 disable = ["all"]
-enable = ["duplicate-code"]
+enable = ["duplicate-code", "too-many-lines"]
+
+[tool.pylint.format]
+max-module-lines = 300
 
 [tool.pylint.reports]
 score = false
@@ -117,7 +130,9 @@ ignore-signatures = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q --tb=short --strict-markers --strict-config"
+addopts = "-q --tb=short --strict-markers --strict-config --no-cov-on-fail"
+xfail_strict = true
+filterwarnings = ["error"]
 
 [tool.coverage.run]
 source = ["src/{{ package_name }}"]

@@ -17,7 +17,11 @@ tests
 Dockerfile
 .dockerignore
 .github
+.gitlab-ci.yml
+.editorconfig
+justfile
 .specify
 .agents
 specs
 AGENTS.md
+CLAUDE.md
