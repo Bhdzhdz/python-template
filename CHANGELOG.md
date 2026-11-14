@@ -1,3 +1,10 @@
+## v1.4.0 (2026-11-14)
+
+### Feat
+
+- add multi-stage Dockerfile, pip-audit, Dependabot, .gitattributes, and stricter gates
+- add GitLab CI support, justfile, stricter lint gates, and --changed check mode
+
 ## v1.3.0 (2026-11-13)
 
 ### Feat
