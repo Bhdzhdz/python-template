@@ -1,3 +1,9 @@
+## v1.5.0 (2026-11-14)
+
+### Feat
+
+- add template update script, _skip_if_exists, and gate fixes
+
 ## v1.4.0 (2026-11-14)
 
 ### Feat
