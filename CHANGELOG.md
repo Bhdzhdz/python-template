@@ -1,3 +1,9 @@
+## v1.6.0 (2026-11-15)
+
+### Feat
+
+- adopt uv_build, uv audit, complexipy, prek, and split dependency groups
+
 ## v1.5.0 (2026-11-14)
 
 ### Feat
