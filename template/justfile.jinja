@@ -4,7 +4,7 @@ set dotenv-load := true
 default:
     @just --list
 
-# Run all 12 repo-wide quality gates (or pass file paths)
+# Run all 11 repo-wide quality gates (or pass file paths)
 check *args:
     ./scripts/check.sh {% raw %}{{ args }}{% endraw %}
 
@@ -31,7 +31,7 @@ cov:
 # Run SAST security scan on src/ and CVE audit on locked dependencies
 audit:
     uv run codeaudit cimode src
-    uv run pip-audit --skip-editable
+    uv audit --preview-features audit-command --locked
 
 # Interactive Conventional Commit prompt
 commit:

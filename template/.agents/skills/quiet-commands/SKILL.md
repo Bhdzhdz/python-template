@@ -16,13 +16,14 @@ Tool output is billed as input tokens on every later turn. Keep it small.
 | All tests + coverage gate | `uv run pytest -x --cov 2>&1 \| tail -30` |
 | Lint (concise by default) | `uv run ruff check .` |
 | Format | `uv run ruff format -q .` |
-| Types | `uv run ty check --output-format concise 2>&1 \| head -40` |
+| Types | `uv run ty check 2>&1 \| head -40` |
 | Dependency hygiene | `uv run deptry .` |
 | Dead code | `uv run vulture` |
 | Import boundaries | `uv run lint-imports` |
 | Duplication | `uv run pylint` |
 | SAST security | `uv run codeaudit cimode src` |
-| Complexity / MI | `uv run xenon -b B -m A -a A src tests` (`radon cc -n C -s src tests`, `radon mi -n B -s src tests`) |
+| Dependency CVE audit | `uv audit --preview-features audit-command --locked` |
+| Cognitive complexity | `uv run complexipy` |
 | Install | `uv sync -q` |
 | Git status | `git status -sb` |
 | Git diff | `git diff --stat`, then `git diff -- <file>` for one file |

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Unified quality gate runner. Prints output ONLY on failure to minimize token usage.
 # Usage:
-#   ./scripts/check.sh [--fix]                         # Run all 12 repo-wide gates + coverage
+#   ./scripts/check.sh [--fix]                         # Run all 11 repo-wide gates + coverage
 #   ./scripts/check.sh [--fix] --changed               # Fast check on git-changed Python files
 #   ./scripts/check.sh [--fix] path/to/file.py [...]   # Fast check on specific file(s) + matching unit tests
 set -uo pipefail
@@ -51,16 +51,6 @@ run_gate() {
     fi
 }
 
-run_mi_gate() {
-    local out status=0
-    out="$(uv run radon mi -n B -s "$@" 2>&1)" || status=$?
-    if [[ "$status" -ne 0 || -n "$out" ]]; then
-        echo "FAIL [radon-mi] (files below Maintainability Index rank A):"
-        printf '%s\n' "$out" | head -n 60 || true
-        failed=1
-    fi
-}
-
 if [[ ${#targets[@]} -gt 0 ]]; then
     if [[ "$fix" -eq 1 ]]; then
         uv run ruff check --fix -q "${targets[@]}" || true
@@ -68,9 +58,8 @@ if [[ ${#targets[@]} -gt 0 ]]; then
     fi
     run_gate "ruff-lint" uv run ruff check "${targets[@]}"
     run_gate "ruff-format" uv run ruff format --check -q "${targets[@]}"
-    run_gate "ty" uv run ty check --output-format concise "${targets[@]}"
-    run_gate "xenon-complexity" uv run xenon --max-absolute B --max-modules A --max-average A "${targets[@]}"
-    run_mi_gate "${targets[@]}"
+    run_gate "ty" uv run ty check "${targets[@]}"
+    run_gate "complexipy" uv run complexipy "${targets[@]}"
 
     pytest_targets=()
     has_src_target=0
@@ -99,7 +88,7 @@ if [[ ${#targets[@]} -gt 0 ]]; then
 
     if [[ ${#pytest_targets[@]} -gt 0 ]]; then
         mapfile -t unique_tests < <(printf '%s\n' "${pytest_targets[@]}" | sort -u)
-        run_gate "pytest" uv run pytest "${unique_tests[@]}" -x -o addopts="-q --tb=short --strict-markers --strict-config --doctest-modules"
+        run_gate "pytest" uv run pytest "${unique_tests[@]}" -x
     fi
 else
     if [[ "$fix" -eq 1 ]]; then
@@ -108,15 +97,14 @@ else
     fi
     run_gate "ruff-lint" uv run ruff check .
     run_gate "ruff-format" uv run ruff format --check -q .
-    run_gate "ty" uv run ty check --output-format concise
+    run_gate "ty" uv run ty check
     run_gate "deptry" uv run deptry .
     run_gate "vulture" uv run vulture
     run_gate "import-linter" uv run lint-imports
     run_gate "pylint" uv run pylint
     run_gate "codeaudit" uv run codeaudit cimode src
-    run_gate "pip-audit" uv run pip-audit --skip-editable
-    run_gate "xenon-complexity" uv run xenon --max-absolute B --max-modules A --max-average A src tests
-    run_mi_gate src tests
+    run_gate "uv-audit" uv audit --preview-features audit-command --locked
+    run_gate "complexipy" uv run complexipy
     run_gate "pytest" uv run pytest -x --cov --no-cov-on-fail
 fi
 

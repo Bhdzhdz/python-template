@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Update pinned versions across the template repository:
-# 1. Pre-commit hook revisions in root and template/.pre-commit-config.yaml
-# 2. Pinned uv image tag in template/Dockerfile.jinja
+# 1. Pre-commit hook revisions in root and template/.pre-commit-config.yaml (via prek)
+# 2. Pinned uv image tag in template/Dockerfile.jinja and uv_build version bound in template/pyproject.toml.jinja
 # 3. Vendored Spec Kit files in template/.specify/ and template/.agents/skills/speckit-* (when --speckit is passed)
 set -euo pipefail
 
@@ -20,13 +20,16 @@ for arg in "$@"; do
 done
 
 echo "==> Updating pre-commit hooks (root & template)..."
-uvx pre-commit autoupdate -c .pre-commit-config.yaml
-uvx pre-commit autoupdate -c template/.pre-commit-config.yaml
+uvx prek update -c .pre-commit-config.yaml
+uvx prek update -c template/.pre-commit-config.yaml
 
-echo "==> Syncing uv version in template/Dockerfile.jinja..."
+echo "==> Syncing uv version in template/Dockerfile.jinja and template/pyproject.toml.jinja..."
 uv_ver="$(uv --version | awk '{print $2}')"
 if [[ -n "$uv_ver" ]]; then
     sed -i -E "s|(ghcr\.io/astral-sh/uv:)[0-9]+\.[0-9]+\.[0-9]+|\1${uv_ver}|g" template/Dockerfile.jinja
+    IFS='.' read -r uv_maj uv_min _ <<< "$uv_ver"
+    uv_next_min=$((uv_min + 1))
+    sed -i -E "s|uv_build>=[0-9]+\.[0-9]+\.[0-9]+,<[0-9]+\.[0-9]+\.[0-9]+|uv_build>=${uv_maj}.${uv_min}.0,<${uv_maj}.${uv_next_min}.0|g" template/pyproject.toml.jinja
 fi
 
 if [[ "$sync_speckit" -eq 1 ]]; then

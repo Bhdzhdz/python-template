@@ -4,9 +4,9 @@
 
 ### I. Automated Quality & Structural Gates (NON-NEGOTIABLE)
 All changes MUST pass `./scripts/check.sh` with zero errors before completion. Exact rules, thresholds, and tool configurations are defined in `pyproject.toml` and summarized in `AGENTS.md`:
-- **Lint, Security & Hygiene (`ruff` + `codeaudit` + `pip-audit`)**: Strict Ruff lint/format rules, AST security validation (`codeaudit cimode src`), and dependency CVE auditing (`pip-audit`). No commented-out code (`ERA`), no `print()` in `src/` (`T20`), no unused arguments (`ARG`), no blind `except Exception` (`BLE`), and no unauthorized suppression comments (`# noqa`, `# type: ignore`, `# nosec`, `# pragma: no cover`).
-- **Complexity & Module/Function Size (`ruff` + `xenon` + `radon` + `pylint`)**: Cyclomatic complexity <= 10 (rank A/B per block, rank A module & average via `xenon`), Maintainability Index rank A (`radon mi`), max 300 lines per module (`pylint`), and strict Pylint structural limits (`pyproject.toml`).
-- **Static Typing (`ty` + `ruff ANN/TC`)**: Explicit type annotations are mandatory on all function and method signatures. `ty check` must pass cleanly.
+- **Lint, Security & Hygiene (`ruff` + `codeaudit` + `uv audit`)**: Strict Ruff lint/format rules, AST security validation (`codeaudit cimode src`), and dependency CVE auditing (`uv audit`). No commented-out code (`ERA`), no `print()` in `src/` (`T20`), no unused arguments (`ARG`), no blind `except Exception` (`BLE`), and no unauthorized suppression comments (`# noqa`, `# type: ignore`, `# nosec`, `# pragma: no cover`).
+- **Complexity & Module/Function Size (`ruff` + `complexipy` + `pylint`)**: McCabe cyclomatic complexity <= 10 (`ruff C901`), cognitive complexity <= 10 (`complexipy`), max 300 lines per module (`pylint`), and strict Pylint structural limits (`pyproject.toml`).
+- **Static Typing (`ty` + `ruff ANN/TC`)**: Explicit type annotations are mandatory on all function and method signatures. `ty check` (`error-on-warning = true`) must pass cleanly.
 - **Zero Duplication & Dead Code (`pylint` + `vulture`)**: No duplicated code blocks >= 6 lines (`pylint` `duplicate-code`); no unused functions, classes, methods, or variables (`vulture`).
 - **Architecture & Dependency Hygiene (`import-linter` + `deptry`)**: No circular imports between sibling modules (`lint-imports`); no unused, missing, or misplaced dependencies (`deptry`).
 
@@ -24,7 +24,7 @@ All changes MUST pass `./scripts/check.sh` with zero errors before completion. E
 - Use `./scripts/check.sh` (or `./scripts/check.sh --fix`) to validate all gates in a single tool call that only prints output on failure.
 
 ## Governance
-- Managed with `uv`, `pre-commit` (hygiene + ruff on commit; `./scripts/check.sh` on push), and `commitizen` (Conventional Commits).
+- Managed with `uv`, `prek` (hygiene + ruff on commit; `./scripts/check.sh` on push), and `commitizen` (Conventional Commits).
 - These principles are non-negotiable across `$speckit-plan`, `$speckit-analyze`, `$speckit-implement`, and code review.
 
 **Version**: 1.0.0

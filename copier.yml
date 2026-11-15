@@ -49,4 +49,4 @@ ci_provider:
 _tasks:
   - "git rev-parse --git-dir >/dev/null 2>&1 || git init -b main"
   - "uv sync"
-  - "uv run pre-commit install"
+  - "uv run prek install"

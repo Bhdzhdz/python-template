@@ -32,6 +32,7 @@ test -f src/smoke_test/py.typed
 ./scripts/check.sh --fix
 uv run just check
 uv run pytest tests/test_smoke.py::test_version
+uv build -q
 
 # Verify _skip_if_exists preserves downstream-owned files on re-copy/update
 echo '# custom' >> src/smoke_test/__init__.py
